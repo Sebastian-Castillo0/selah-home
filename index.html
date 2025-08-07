@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Selah Home</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <!-- Carrito en la esquina superior derecha -->
+    <div id="carrito-container">
+      <span id="carrito-icon">🛒</span>
+      <span id="carrito-contador">0</span>
+      <!-- Dropdown del carrito -->
+      <div id="carrito-dropdown" class="carrito-dropdown">
+        <h3>Carrito de compras</h3>
+        <ul id="carrito-lista"></ul>
+        <div id="carrito-total" class="carrito-total"></div>
+      </div>
+    </div>
+    <h1><img src="img/logo22.png" alt="Selah Home logo featuring a simple house outline above the words SELAH HOME in elegant black letters, conveying a calm and welcoming atmosphere" class="logo logo-h1"> </h1>
+
+<nav>
+  <a href="#">Inicio</a>
+
+  <div class="dropdown">
+    <div class="dropbtn-wrapper">
+      <a href="#" class="dropbtn">Dormitorio</a>
+      <div class="dropdown-content">
+        <a href="#">Almohadas</a>
+        <a href="#">Fundas</a>
+        <a href="#">Edredones</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="dropdown">
+    <div class="dropbtn-wrapper">
+      <a href="#" class="dropbtn">Sábanas</a>
+      <div class="dropdown-content">
+        <a href="#">Sábanas 1 Plaza</a>
+        <a href="#">Sábanas 2 Plazas</a>
+        <a href="#">Sábanas King</a>
+      </div>
+    </div>
+  </div>
+
+  <a href="https://wa.me/5491123456789" target="_blank">
+    <button class="btn-whatsapp">Contactar por WhatsApp</button>
+  </a>
+</nav>
+  </header>
+  <main>
+    <section class="productos">
+      <article class="producto">
+        <img src="img/Diseño sin título.png" alt="Sábanas">
+        <h2>Sábanas 2 Plazas</h2>
+        <p>$110.000</p>
+        <button class="btn-comprar" data-producto="Sábanas 2 Plazas" data-precio="$110.000">Comprar</button>
+      </article>
+
+      <article class="producto">
+        <img src="img/toallas - Editada.jpg" alt="Toalla">
+        <h2>Toallon Acoiris</h2>
+        <p>$30.200</p>
+        <button class="btn-comprar" data-producto="Toallon Acoiris" data-precio="$30.200">Comprar</button>
+      </article>
+
+      <article class="producto">
+        <img src="img/images -edredddon.jpg" alt="Edredon">
+        <h2>Edredon Kavanagh </h2>
+        <p>$80.000</p>
+        <button class="btn-comprar" data-producto="Edredon Kavanagh" data-precio="$80.000">Comprar</button>
+      </article>
+
+            <article class="producto">
+        <img src="img/acolchado2500-negro-monograma-11201_1f3a1633-dca5-421f-af13-479e446dbedb.jpg" alt="Edredon">
+        <h2>Acolchado BYW</h2>
+        <p>$110.000</p>
+        <button class="btn-comprar" data-producto="Acolchado Monograma" data-precio="$110.000">Comprar</button>
+      </article>
+    </section>
+
+    <!-- Video de fondo -->
+    <div class="video-fondo-container">
+      <video class="video-fondo" autoplay loop muted playsinline>
+        <source src="img/videoplayback.mp4"video/mp4">
+        Tu navegador no soporta el video.
+      </video>
+    </div>
+
+    <script>
+      // Carrito simple
+      let contador = 0;
+      const contadorElem = document.getElementById('carrito-contador');
+      const carritoLista = document.getElementById('carrito-lista');
+      const carritoIcon = document.getElementById('carrito-icon');
+      const carritoDropdown = document.getElementById('carrito-dropdown');
+      let carrito = [];
+
+      document.querySelectorAll('.btn-comprar').forEach(btn => {
+        btn.addEventListener('click', () => {
+          contador++;
+          contadorElem.textContent = contador;
+          const producto = btn.getAttribute('data-producto');
+          const precio = btn.getAttribute('data-precio');
+          carrito.push({ producto, precio });
+        });
+      });
+
+      function parsePrecio(precioStr) {
+        // Extrae el número de un string tipo "$110.000"
+        return Number(precioStr.replace(/[^0-9,]/g, '').replace('.', '').replace(',', '.'));
+      }
+
+      function renderCarrito() {
+        carritoLista.innerHTML = '';
+        let total = 0;
+        if (carrito.length === 0) {
+          carritoLista.innerHTML = '<li>El carrito está vacío.</li>';
+          document.getElementById('carrito-total').textContent = '';
+        } else {
+          carrito.forEach((item, idx) => {
+            const li = document.createElement('li');
+            li.textContent = `${item.producto} - ${item.precio} `;
+            // Botón eliminar
+            const btnEliminar = document.createElement('button');
+            btnEliminar.textContent = 'Eliminar';
+            btnEliminar.className = 'eliminar-carrito';
+            btnEliminar.onclick = function(e) {
+              e.stopPropagation();
+              carrito.splice(idx, 1);
+              contador--;
+              contadorElem.textContent = contador;
+              renderCarrito();
+            };
+            li.appendChild(btnEliminar);
+            carritoLista.appendChild(li);
+            total += parsePrecio(item.precio);
+          });
+          document.getElementById('carrito-total').textContent = 'Total: $' + total.toLocaleString('es-AR');
+        }
+      }
+
+      carritoIcon.addEventListener('click', (e) => {
+        renderCarrito();
+        carritoDropdown.classList.toggle('show');
+        e.stopPropagation();
+      });
+
+      // Cerrar el dropdown si se hace click fuera
+      window.addEventListener('click', () => {
+        carritoDropdown.classList.remove('show');
+      });
+
+      // Evita que el dropdown se cierre al hacer click dentro
+      carritoDropdown.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+    </script>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Selah Home</p>
+  </footer>
+</body>
+</html>
